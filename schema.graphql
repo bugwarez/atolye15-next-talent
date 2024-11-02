@@ -1,0 +1,317 @@
+#Hem Freelancer hem de Şirket yetkili/temsilcilerini karşılayan kullanıcı type'ı.
+type User {
+  id: ID!
+  email: String!
+  firstName: String!
+  lastName: String!
+  phoneNumber: String!
+  countryOfResidence: String!
+  role: UserRole!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  profile: Profile
+  company: Company
+}
+
+#Userları birbirinden ayıran type.
+enum UserRole {
+  FREELANCER
+  COMPANY_REPRESENTATIVE
+  ADMIN
+}
+
+#Freelancerlar için profesyonel profil detayları
+type Profile {
+  id: ID!
+  userId: ID!
+  user: User!
+  employmentType: EmploymentType
+  mainSpecialization: Specialization!
+  seniority: Seniority!
+  commercialExperienceStartDate: DateTime!
+  technologies: [ProfileTechnology!]!
+  githubUrl: String
+  linkedinUrl: String
+  cvUrl: String
+  experiences: [Experience!]!
+  applications: [JobApplication!]!
+  matchScore: Float
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+#Profilde Sergilenen Teknoloji Detayları
+type ProfileTechnology {
+  id: ID!
+  profileId: ID!
+  technologyId: ID!
+  technology: Technology!
+  seniority: Seniority!
+  yearsOfExperience: Int!
+}
+
+#İşe alım, Kontrat typeları.
+enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  NOT_SURE
+}
+
+#Uzmanlık Alanları. Figma dizaynında "elle string olarak girilen" veya başka bir "uzmanlık alanı listesi" olmadığı için, tanımlanan tek uzmanlık alanları olarak bunları kabul edip enum şekilnde tanımladık.
+enum Specialization {
+  FRONTEND_DEVELOPER
+  BACKEND_DEVELOPER
+  FULLSTACK_DEVELOPER
+  MOBILE_DEVELOPER
+  AI_ENGINEER
+  QA_ENGINEER
+  DEVOPS_ENGINEER
+}
+
+#Alanlardaki uzmanlık derecesi. Sabit olduğu için enum olarak bu şekilde sakladık.
+enum Seniority {
+  JUNIOR
+  MID
+  SENIOR
+  LEAD
+}
+
+#Freelancer'ın tanımlanan iş tecrübeleri.
+type Experience {
+  id: ID!
+  profileId: ID!
+  industry: String!
+  companyName: String!
+  position: String!
+  duration: String!
+  teamSize: Int!
+  startDate: DateTime!
+  endDate: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+#İlan Paylaşan şirket temsilcileri'nin şirket profil detayları.
+type Company {
+  id: ID!
+  name: String!
+  description: String
+  website: String
+  representativeId: ID!
+  representative: User!
+  jobPosts: [JobPost!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+#Gerekli Uzmanlıklar, açıklamalar ve diğer detaylarla birlikte iş ilanı detaylrı.
+type JobPost {
+  id: ID!
+  companyId: ID!
+  company: Company!
+  title: String!
+  description: String!
+  hoursPerWeek: Int! # UI kısmında 3 seçenek tanımlanıp(full time - 40hrs/week, Part time - 25hrs/week ve 0(looking around) olarak tanımlanabilir. )
+  projectLength: Int! # ay olarak. 1 yıl üzerindekiler 13-15-22 ay olarak saklanıp, ui'da tekrar parse edilerek 1yıl,2yıl olarak yazılabilir.
+  positions: [JobPosition!]!
+  technologies: [JobTechnology!]!
+  status: JobStatus!
+  applications: [JobApplication!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+#İlandaki pozisyon detayları
+type JobPosition {
+  id: ID!
+  jobPostId: ID!
+  specialization: Specialization!
+  seniority: Seniority!
+  count: Int!
+}
+
+#İlandaki teknolojiler
+type JobTechnology {
+  id: ID!
+  jobPostId: ID!
+  technologyId: ID!
+  technology: Technology!
+  seniority: Seniority!
+}
+
+#İlanın Durumu
+enum JobStatus {
+  DRAFT
+  PUBLISHED
+  CLOSED
+  CANCELLED
+}
+
+#Tech Stack referansları
+type Technology {
+  id: ID!
+  name: String!
+  category: TechnologyCategory!
+  profileTechnologies: [ProfileTechnology!]!
+  jobTechnologies: [JobTechnology!]!
+}
+
+#Tech stack verilerinin ilişkili olduğu uzmanlık alanları
+enum TechnologyCategory {
+  FRONTEND
+  BACKEND
+  MOBILE
+  DEVOPS
+  DATABASE
+  CLOUD
+  OTHER
+}
+
+#Başvurulan ilan detayları
+type JobApplication {
+  id: ID!
+  jobPostId: ID!
+  jobPost: JobPost!
+  profileId: ID!
+  profile: Profile!
+  appliedPosition: Specialization!
+  status: ApplicationStatus!
+  matchScore: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+#Başvuru sonuçları
+enum ApplicationStatus {
+  PENDING
+  REVIEWING
+  ACCEPTED
+  REJECTED
+  WITHDRAWN
+}
+
+# Query(ler)
+type Query {
+  getProfile(id: ID!): Profile
+  getJobPost(id: ID!): JobPost
+  getJobPosts(
+    filter: JobPostFilter
+    pagination: PaginationInput
+  ): JobPostConnection!
+  getMatchingFreelancers(
+    jobPostId: ID!
+    pagination: PaginationInput
+  ): ProfileConnection!
+  getMatchingJobs(
+    profileId: ID!
+    pagination: PaginationInput
+  ): JobPostConnection!
+}
+
+#İlan filtreleri
+input JobPostFilter {
+  specializations: [Specialization!]
+  technologies: [ID!]
+  seniority: [Seniority!]
+  employmentType: EmploymentType
+}
+
+#Performans için Pagination
+input PaginationInput {
+  offset: Int!
+  limit: Int!
+}
+
+type JobPostConnection {
+  nodes: [JobPost!]!
+  totalCount: Int!
+}
+
+type ProfileConnection {
+  nodes: [Profile!]!
+  totalCount: Int!
+}
+
+# Mutation(lar)
+type Mutation {
+  createProfile(input: CreateProfileInput!): Profile!
+  updateProfile(id: ID!, input: UpdateProfileInput!): Profile!
+  createJobPost(input: CreateJobPostInput!): JobPost!
+  updateJobPost(id: ID!, input: UpdateJobPostInput!): JobPost!
+  applyToJob(input: JobApplicationInput!): JobApplication!
+  updateApplicationStatus(id: ID!, status: ApplicationStatus!): JobApplication!
+}
+
+input CreateProfileInput {
+  employmentType: EmploymentType!
+  mainSpecialization: Specialization!
+  seniority: Seniority!
+  commercialExperienceStartDate: DateTime!
+  technologies: [ProfileTechnologyInput!]!
+  githubUrl: String
+  linkedinUrl: String
+  cvUrl: String
+  experiences: [ExperienceInput!]!
+}
+
+input UpdateProfileInput {
+  employmentType: EmploymentType
+  mainSpecialization: Specialization
+  seniority: Seniority
+  technologies: [ProfileTechnologyInput!]
+  githubUrl: String
+  linkedinUrl: String
+  cvUrl: String
+  experiences: [ExperienceInput!]
+}
+
+input ProfileTechnologyInput {
+  technologyId: ID!
+  seniority: Seniority!
+  yearsOfExperience: Int!
+}
+
+input ExperienceInput {
+  industry: String!
+  companyName: String!
+  position: String!
+  duration: String!
+  teamSize: Int!
+  startDate: DateTime!
+  endDate: DateTime
+}
+
+input CreateJobPostInput {
+  title: String!
+  description: String!
+  hoursPerWeek: Int!
+  projectLength: Int!
+  positions: [JobPositionInput!]!
+  technologies: [JobTechnologyInput!]!
+}
+
+input UpdateJobPostInput {
+  title: String
+  description: String
+  hoursPerWeek: Int
+  projectLength: Int
+  positions: [JobPositionInput!]
+  technologies: [JobTechnologyInput!]
+  status: JobStatus
+}
+
+input JobPositionInput {
+  specialization: Specialization!
+  seniority: Seniority!
+  count: Int!
+}
+
+input JobTechnologyInput {
+  technologyId: ID!
+  seniority: Seniority!
+}
+
+input JobApplicationInput {
+  jobPostId: ID!
+  appliedPosition: Specialization!
+}
