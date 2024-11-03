@@ -16,10 +16,16 @@ type FreelancerProfile = {
 };
 
 function calculateMatchScore(jobPost: JobPost, freelancer: FreelancerProfile): number {
-  let score = 0;
+ let score = 0;
 
   // Uzmanlık Alanı (0,3 Öncelik)
-  const expertiseScore = jobPost.expertise === freelancer.expertise ? 1 : 0;
+  let expertiseScore = 0;
+  if (jobPost.expertise === freelancer.expertise) {
+    expertiseScore = 1; // Tam Uyum
+  } else if ((jobPost.expertise === "Frontend Development" || jobPost.expertise === "Backend Development") 
+             && freelancer.expertise === "Fullstack Development") {
+    expertiseScore = 0.5; // Kısmi Uyum: Fullstack aday Frontend/Backend ilanına başvuruyor
+  }
   score += expertiseScore * 0.3;
 
   // Uzmanlık (0,2 Öncelik)
@@ -44,7 +50,7 @@ function calculateMatchScore(jobPost: JobPost, freelancer: FreelancerProfile): n
 
 // Örnek iş ilanı datası
 const jobPost: JobPost = {
-  expertise: "Frontend Development",
+  expertise: "Fullstack Development",
   seniority: "MID",
   requiredTechnologies: ["React", "TypeScript", "Redux"],
   workType: "FULL_TIME",
