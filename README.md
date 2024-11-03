@@ -35,3 +35,6 @@ Tüm architecture kısmında hangi alanlarda neden bu kararları aldığımı a�
 | `JobPost` type'ındaki haftalık çalışma saati(`hoursPerWeek`) neden Int?  | Şimdiki zamanda sabit 3 adet saat değeri(40-25-0(emin değil)) olabilir ancak ilerleyen zamanlarda customize edilebilecek bir alana dönüşebilir. bu sebeple freelancer'ın haftada çalışmak istediği zaman listelenmemişse, kendisi custom olarak bir int değer girerek "x saat çalışırım" diyebilir. |
 | `JobPost` type'ındaki Proje süresi(`projectLength`) neden int?  | tarihlerin her zaman database/client kısımlarındaki tutarsızlık problemlerinin önüne geçmek, yıl/ay ayrımını farklı bir field(duration:3, durationType:"month") gibi yapmamak için, kontrat süresini sadece ay olarak saklayıp, ui kısmında parse ederek istersek 12 month = 1 Year gibi yazdırabiliriz. |
 | `JobPost` type'ındaki positions(`JobPosition`) neden ayrı?  | Aslında diğer modüler yapılarda olduğu gibi, geliştirebilirlik, DX, Optimizasyon sebepleri yüzünden. |
+
+
+# Asıl eşleştirme algoritması dökümanı, [match_algorithm.md](match_algorithm.md) içerisinde, test kodu ise [main.ts](main.ts) içerisinde
