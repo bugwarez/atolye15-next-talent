@@ -34,7 +34,7 @@ Atolye15 Next Talent Projesi freelancer ve iş ilanlarını skorlayıp eşleşti
 | Alan  | Hesaplanması |
 | ------------- | ------------- |
 |**Uzmanlık Alanı**| Tam Uyum(Hem İlan, Hem Aday Profilinde Front-end Developer) 1 Puan, <br/>  Kısmi Uyum(Fullstack olan bir aday, sadece Front-end veya Back-End ilanlarına uygun olabilir) 0.5 puan.  |
-| **Uzmanlık**  | Tam Uyum(Hem ilan, hem de aday profili **Junior**) 1 Puan, <br/> Kısmi Uyum(İlan profili **Mid**, Aday Profili **Senior**, olduğu durumda) 0.7 Puan, <br/>  Düşük Uyum(İlan Profili **Senior**, Aday profili **Junior** olduğunda)  |
+| **Uzmanlık**  | Tam Uyum(Hem ilan, hem de aday profili **Junior**) 1 Puan, <br/>  Düşük Uyum(İlan Profili **Senior**, Aday profili **Junior** olduğunda)  |
 | **Teknoloji**  | Çoklu seçeneklerin eşleşebileceği bir veri seti olduğundan, şemadaki her bir `JobTechnology` için: <br/> Aynı Teknoloji ve Teknolojideki Uzmanlık için Tam Uyum(örn: Hem ilanda, hem freelancer profilinde React(Senior)) 1 Puan(Uyuşan her bir teknoloji için). <br/> Kısmi Uyum(İlandaki Teknoloji(React) **Senior** isteyip, aday profilindeki Teknoloji(React) **Mid** olduğunda 0.5 Puan(Uyuşan her bir teknoloji için)). Önemli Not: Kısmi uyum durumlarında, uyuşan teknoloji başında 0.5 puan ekle ve iş ilanındaki teknoloji sayısına göre normalize et.|
 | **Çalışma Şekli**  | Tam Uyum(Hem ilan, hem de aday profili **Full Time** veya Aday Profili **Emin Değilim** olduğunda) 1 Puan, <br/> Kısmi Uyum(İlan profili **Full Time**, Aday Profili **Part Time**, olduğu durumda) 0.5 Puan|
 | **Uzmanlık Süresi**  | Tam Uyum(İlandaki proje süresi, Adayın toplam tecrübesine eşit veya daha azsa) 1 Puan, <br/> Kısmi Uyum(İlandaki proje süresi, aday'ın toplam tecrübesine yakınsa(6 ay kadar)) 0.5 Puan|
