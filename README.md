@@ -8,6 +8,9 @@ Atolye15 Next Talent freelancer-company matching platform Database architecture 
 
 Selamlar, Ben Tunahan GÜNDÜZ, Bu repo da Atolye15 Next Talent Projesi için hazırladığım "GraphQL schema" ve "Database architecture"
 
+[Şema](schema.graphql)
+
+[DB Yapısı](11-2-2024-init.sql)
 # GraphQL Schema Notları:
 
 1-İlan açan ve ilanlara başvuran iki tarafı da user olarak tanımlayıp, bu userları sahip oldukları rollere göre ayırarak her kişinin hem "şirket yetkilisi", hem de gerektiğinde "freelancer" olabileceği zamanlarda farklı hesaplar açmaması için, tek user altında farklı `User Role` ile topluyoruz.
